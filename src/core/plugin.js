@@ -73,6 +73,14 @@ export default class RethinkPlugin {
       this.dnsCacheCallback
     );
 
+    // Add CNAME injector here (before commandControl)
+    this.registerPlugin(
+      "cnameInjector",
+      services.cnameInjector,
+      ["rxid", "requestDecodedDnsPacket", "isDnsMsg"],
+      this.cnameInjectorCallback.bind(this)
+    );
+
     this.registerPlugin(
       "commandControl",
       services.commandControl,
@@ -126,6 +134,31 @@ export default class RethinkPlugin {
 
   addCtx(k, v) {
     this.ctx.set(k, v);
+  }
+
+  /**
+   * CNAME Injector Callback
+   * @param {pres.RResp} response
+   * @param {IOState} io
+   */
+  cnameInjectorCallback(response, io) {
+    const rxid = this.ctx.get("rxid");
+    const r = response.data;
+
+    this.log.d(rxid, "cname injector callback");
+
+    if (response.isException) {
+      this.log.w(rxid, "cname injector exception", response.exceptionStack);
+      // Don't fail the request, just continue to upstream resolver
+    } else if (r && dnsutil.isAnswer(r.dnsPacket)) {
+      this.log.i(rxid, "cname response from injector");
+      this.addCtx("responseBodyBuffer", r.dnsBuffer);
+      this.addCtx("responseDecodedDnsPacket", r.dnsPacket);
+      this.addCtx("blockflag", "");
+      io.dnsResponse(r.dnsBuffer, r.dnsPacket, "");
+    } else {
+      this.log.d(rxid, "no cname match, continuing to resolver");
+    }
   }
 
   /**

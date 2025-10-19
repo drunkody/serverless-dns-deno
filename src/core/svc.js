@@ -14,6 +14,7 @@ import {
   DNSCacheResponder,
   DNSResolver,
   DnsCache,
+  CNAMEInjector,
 } from "../plugins/dns-op/dns-op.js";
 import { LogPusher } from "../plugins/observability/log-pusher.js";
 import * as dnsutil from "../commons/dnsutil.js";
@@ -33,6 +34,8 @@ export const services = {
   userOp: null,
   /** @type {DNSPrefilter?} prefilter */
   prefilter: null,
+  /** @type {CNAMEInjector?} cnameInjector */  // Add this
+  cnameInjector: null,                         // Add this
   /** @type {CommandControl?} commandControl */
   commandControl: null,
   /** @type {DNSCacheResponder?} dnsCacheHandler */
@@ -64,6 +67,7 @@ async function systemReady(args) {
   services.logPusher = lp;
   services.userOp = new UserOp();
   services.prefilter = new DNSPrefilter();
+  services.cnameInjector = new CNAMEInjector(); // Add this line
   services.dnsCacheHandler = new DNSCacheResponder(bw, cache);
   services.dnsResolver = new DNSResolver(bw, cache, dns53);
   services.commandControl = new CommandControl(bw, services.dnsResolver, lp);

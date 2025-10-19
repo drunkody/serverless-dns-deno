@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "rules": {
+    "usher.ttvnw.net": {
+      "target": "subdomain.mirhost.com",
+      "ipv4": "34.91.220.15",
+      "ipv6": null
+    },
+    "*.hls.ttvnw.net": {
+      "target": "subdomain.mirhost.com",
+      "ipv4": "34.91.220.15",
+      "ipv6": null
+    },
+    "*.ttvnw.net": {
+      "target": "subdomain.mirhost.com",
+      "ipv4": "34.91.220.15",
+      "ipv6": null
+    },
+    "video-weaver.*.ttvnw.net": {
+      "target": "subdomain.mirhost.com",
+      "ipv4": "34.91.220.15",
+      "ipv6": null
+    }
+  }
+}
