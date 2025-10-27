@@ -10,5 +10,6 @@ import DNSResolver from "./resolver.js";
 import { DNSPrefilter } from "./prefilter.js";
 import { DNSCacheResponder } from "./cache-resolver.js";
 import { DnsCache } from "./cache.js";
+import { CNAMEInjector } from "./cname-injector.js"; // Add this line
 
-export { DNSResolver, DNSCacheResponder, DnsCache, DNSPrefilter };
+export { DNSResolver, DNSCacheResponder, DnsCache, DNSPrefilter, CNAMEInjector }; // Add CNAMEInjector
